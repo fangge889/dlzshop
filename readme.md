@@ -1,7 +1,6 @@
 # Miccall Theme Readme
 ###### version 1.2.0
-
-<img src="http://onh0umlhz.bkt.clouddn.com/githubhexothemereadmemain.png" width="100%" />
+ 
 
 ## Contents 目录
 
@@ -14,12 +13,11 @@
 
 ## General概括
 
-- 主题开发 套用了大量的[HTML5 UP][2] 模板 因为作者是前端小白 css功底菜鸡
-在此鸣谢支持我的各位大佬
+- 主题开发 套用了大量的[HTML5 UP][2] 
 
 ## Demo 演示
 
-个人网站 : [miccall.tech](http://miccall.tech)
+
 
 主题文章列表: 
 <img src="http://onh0umlhz.bkt.clouddn.com/githubhexothemereadmesecond.png" width="100%" />
