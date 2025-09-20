@@ -29,6 +29,14 @@ nav ul li {
     margin-right: 1rem;
 }
 
+.section-actions {
+    margin-bottom: 1rem;
+}
+
+.section-actions .btn {
+    margin-right: 0.5rem;
+}
+
 nav ul li a {
     color: white;
     text-decoration: none;
@@ -129,4 +137,24 @@ table th {
 
 .modal-content {
     background-color: white;
+    margin: 10% auto;
+    padding: 20px;
+    border-radius: 5px;
+    width: 80%;
+    max-width: 500px;
+}
+
+.modal-content .close {
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.modal-content .close:hover {
+    color: #e74c3c;
+}
+
+.modal-content h2 {
+    margin-top: 0;
 }

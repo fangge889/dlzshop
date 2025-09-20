@@ -14,6 +14,7 @@
                     <li><a href="#pages">页面管理</a></li>
                     <li><a href="#navigation">导航管理</a></li>
                     <li><a href="#settings">站点设置</a></li>
+                    <li><a href="/" target="_blank">查看网站</a></li>
                 </ul>
             </nav>
         </header>
@@ -21,13 +22,17 @@
         <main>
             <section id="pages">
                 <h2>页面管理</h2>
-                <button id="add-page" class="btn btn-primary">添加新页面</button>
+                <div class="section-actions">
+                    <button id="add-page" class="btn btn-primary">添加新页面</button>
+                    <button id="refresh-pages" class="btn btn-secondary">刷新</button>
+                </div>
                 <table id="pages-table">
                     <thead>
                         <tr>
                             <th>页面标题</th>
                             <th>URL</th>
                             <th>状态</th>
+                            <th>最后更新</th>
                             <th>操作</th>
                         </tr>
                     </thead>
@@ -39,7 +44,10 @@
             
             <section id="navigation">
                 <h2>导航管理</h2>
-                <button id="add-nav-item" class="btn btn-primary">添加导航项</button>
+                <div class="section-actions">
+                    <button id="add-nav-item" class="btn btn-primary">添加导航项</button>
+                    <button id="refresh-nav" class="btn btn-secondary">刷新</button>
+                </div>
                 <ul id="nav-list">
                     <!-- 导航数据将通过JavaScript动态加载 -->
                 </ul>
@@ -56,10 +64,42 @@
                         <label for="site-description">站点描述:</label>
                         <textarea id="site-description" name="site_description"></textarea>
                     </div>
+                    <div class="form-group">
+                        <label for="admin-email">管理员邮箱:</label>
+                        <input type="email" id="admin-email" name="admin_email">
+                    </div>
                     <button type="submit" class="btn btn-primary">保存设置</button>
                 </form>
             </section>
         </main>
+    </div>
+    
+    <!-- 添加页面模态框 -->
+    <div id="add-page-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>添加新页面</h2>
+            <form id="add-page-form">
+                <div class="form-group">
+                    <label for="new-page-title">页面标题:</label>
+                    <input type="text" id="new-page-title" name="title" required>
+                </div>
+                <div class="form-group">
+                    <label for="new-page-id">页面ID:</label>
+                    <input type="text" id="new-page-id" name="id" required>
+                    <small>只能包含字母、数字和连字符</small>
+                </div>
+                <div class="form-group">
+                    <label for="new-page-layout">页面布局:</label>
+                    <select id="new-page-layout" name="layout">
+                        <option value="index">首页布局</option>
+                        <option value="page" selected>普通页面布局</option>
+                        <option value="post">文章布局</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">创建页面</button>
+            </form>
+        </div>
     </div>
     
     <script src="/js/admin.js"></script>

@@ -70,7 +70,108 @@ function updateSiteConfig(req, res) {
     }
 }
 
-// 添加新页面
-function addPage(req, res) {
-    // 实现将在后续版本中完成
+// 获取特定页面
+function getPage(req, res) {
+    const pageId = req.params.id;
+    const pages = readJsonFile(pagesFile);
+    
+    if (pages) {
+        const page = pages.find(p => p.id === pageId);
+        if (page) {
+            res.json(page);
+        } else {
+            res.status(404).json({ error: '页面未找到' });
+        }
+    } else {
+        res.status(500).json({ error: '无法读取页面数据' });
+    }
+}
+
+// 添加或更新页面
+function savePage(req, res) {
+    const pageData = req.body;
+    const pages = readJsonFile(pagesFile) || [];
+    
+    // 查找是否已存在相同ID的页面
+    const existingPageIndex = pages.findIndex(p => p.id === pageData.id);
+    
+    if (existingPageIndex >= 0) {
+        // 更新现有页面
+        pages[existingPageIndex] = pageData;
+    } else {
+        // 添加新页面
+        pages.push(pageData);
+    }
+    
+    const success = writeJsonFile(pagesFile, pages);
+    
+    if (success) {
+        res.json({ message: '页面保存成功', page: pageData });
+    } else {
+        res.status(500).json({ error: '无法保存页面' });
+    }
+}
+
+// 删除页面
+function deletePage(req, res) {
+    const pageId = req.params.id;
+    let pages = readJsonFile(pagesFile) || [];
+    
+    pages = pages.filter(p => p.id !== pageId);
+    
+    const success = writeJsonFile(pagesFile, pages);
+    
+    if (success) {
+        res.json({ message: '页面删除成功' });
+    } else {
+        res.status(500).json({ error: '无法删除页面' });
+    }
+}
+
+// 发布页面
+function publishPage(req, res) {
+    const pageId = req.params.id;
+    const pages = readJsonFile(pagesFile) || [];
+    
+    const pageIndex = pages.findIndex(p => p.id === pageId);
+    
+    if (pageIndex >= 0) {
+        // 更新页面状态为已发布
+        pages[pageIndex].status = 'published';
+        pages[pageIndex].updated_at = new Date().toISOString();
+        
+        const success = writeJsonFile(pagesFile, pages);
+        
+        if (success) {
+            res.json({ message: '页面发布成功', page: pages[pageIndex] });
+        } else {
+            res.status(500).json({ error: '无法发布页面' });
+        }
+    } else {
+        res.status(404).json({ error: '页面未找到' });
+    }
+}
+
+// 取消发布页面
+function unpublishPage(req, res) {
+    const pageId = req.params.id;
+    const pages = readJsonFile(pagesFile) || [];
+    
+    const pageIndex = pages.findIndex(p => p.id === pageId);
+    
+    if (pageIndex >= 0) {
+        // 更新页面状态为草稿
+        pages[pageIndex].status = 'draft';
+        pages[pageIndex].updated_at = new Date().toISOString();
+        
+        const success = writeJsonFile(pagesFile, pages);
+        
+        if (success) {
+            res.json({ message: '页面已转为草稿', page: pages[pageIndex] });
+        } else {
+            res.status(500).json({ error: '无法更新页面状态' });
+        }
+    } else {
+        res.status(404).json({ error: '页面未找到' });
+    }
 }
