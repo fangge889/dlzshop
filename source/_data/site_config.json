@@ -1,0 +1,8 @@
+{
+  "site_name": "DLZ Shop",
+  "site_description": "一个动态内容管理系统",
+  "theme": "miccall",
+  "language": "zh-CN",
+  "timezone": "Asia/Shanghai",
+  "admin_email": "admin@example.com"
+}

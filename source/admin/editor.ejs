@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>页面编辑器 - 内容管理系统</title>
+    <link rel="stylesheet" href="/css/admin.css">
+    <link rel="stylesheet" href="/css/editor.css">
+</head>
+<body>
+    <div class="editor-container">
+        <header>
+            <h1>页面编辑器</h1>
+            <div class="editor-actions">
+                <button id="save-page" class="btn btn-primary">保存页面</button>
+                <button id="preview-page" class="btn btn-secondary">预览页面</button>
+                <button id="publish-page" class="btn btn-success">发布页面</button>
+                <a href="/admin/" class="btn btn-secondary">返回管理面板</a>
+            </div>
+        </header>
+        
+        <main>
+            <form id="page-editor-form">
+                <div class="form-group">
+                    <label for="page-title">页面标题:</label>
+                    <input type="text" id="page-title" name="title" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="page-id">页面ID:</label>
+                    <input type="text" id="page-id" name="id" required>
+                    <small>页面ID将用于生成URL，只能包含字母、数字和连字符</small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="page-layout">页面布局:</label>
+                    <select id="page-layout" name="layout">
+                        <option value="index">首页布局</option>
+                        <option value="page">普通页面布局</option>
+                        <option value="post">文章布局</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="page-content">页面内容:</label>
+                    <textarea id="page-content" name="content" required></textarea>
+                    <small>支持Markdown语法</small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="page-status">页面状态:</label>
+                    <select id="page-status" name="status">
+                        <option value="draft">草稿</option>
+                        <option value="published">已发布</option>
+                    </select>
+                </div>
+                
+                <input type="hidden" id="page-created-at" name="created_at">
+                <input type="hidden" id="page-updated-at" name="updated_at">
+            </form>
+        </main>
+    </div>
+    
+    <div id="preview-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>页面预览</h2>
+            <div id="preview-content"></div>
+        </div>
+    </div>
+    
+    <script src="/js/editor.js"></script>
+</body>
+</html>

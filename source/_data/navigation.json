@@ -1,0 +1,28 @@
+{
+  "menu": [
+    {
+      "id": "home",
+      "title": "主页",
+      "url": "/",
+      "order": 1
+    },
+    {
+      "id": "about",
+      "title": "关于我们",
+      "url": "/about/",
+      "order": 2
+    },
+    {
+      "id": "gallery",
+      "title": "图库",
+      "url": "/gallery/",
+      "order": 3
+    },
+    {
+      "id": "contact",
+      "title": "联系我们",
+      "url": "/contact/",
+      "order": 4
+    }
+  ]
+}

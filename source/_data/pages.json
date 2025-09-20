@@ -1,0 +1,20 @@
+[
+  {
+    "id": "home",
+    "title": "首页",
+    "layout": "index",
+    "content": "欢迎来到我们的网站",
+    "status": "published",
+    "created_at": "2025-09-20T00:00:00Z",
+    "updated_at": "2025-09-20T00:00:00Z"
+  },
+  {
+    "id": "about",
+    "title": "关于我们",
+    "layout": "page",
+    "content": "这是关于我们的页面内容",
+    "status": "published",
+    "created_at": "2025-09-20T00:00:00Z",
+    "updated_at": "2025-09-20T00:00:00Z"
+  }
+]
