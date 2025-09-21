@@ -4,7 +4,7 @@ import { LoginCredentials, RegisterData, AuthResponse, RefreshTokenResponse } fr
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001/api';
 
 // 创建 axios 实例
-const authAPI = axios.create({
+const apiClient = axios.create({
   baseURL: `${API_BASE_URL}/auth`,
   timeout: 10000,
   headers: {
@@ -13,7 +13,7 @@ const authAPI = axios.create({
 });
 
 // 请求拦截器
-authAPI.interceptors.request.use(
+apiClient.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('token');
     if (token) {
@@ -27,7 +27,7 @@ authAPI.interceptors.request.use(
 );
 
 // 响应拦截器
-authAPI.interceptors.response.use(
+apiClient.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
@@ -38,14 +38,14 @@ authAPI.interceptors.response.use(
       try {
         const refreshToken = localStorage.getItem('refreshToken');
         if (refreshToken) {
-          const response = await authAPI.post('/refresh', { refreshToken });
+          const response = await apiClient.post('/refresh', { refreshToken });
           const { token, refreshToken: newRefreshToken } = response.data.data;
           
           localStorage.setItem('token', token);
           localStorage.setItem('refreshToken', newRefreshToken);
           
           originalRequest.headers.Authorization = `Bearer ${token}`;
-          return authAPI(originalRequest);
+          return apiClient(originalRequest);
         }
       } catch (refreshError) {
         localStorage.removeItem('token');
@@ -61,25 +61,25 @@ authAPI.interceptors.response.use(
 export const authAPI = {
   // 用户登录
   login: (credentials: LoginCredentials): Promise<AuthResponse> =>
-    authAPI.post('/login', credentials),
+    apiClient.post('/login', credentials),
 
   // 用户注册
   register: (userData: RegisterData): Promise<AuthResponse> =>
-    authAPI.post('/register', userData),
+    apiClient.post('/register', userData),
 
   // 刷新令牌
   refreshToken: (refreshToken: string): Promise<RefreshTokenResponse> =>
-    authAPI.post('/refresh', { refreshToken }),
+    apiClient.post('/refresh', { refreshToken }),
 
   // 用户登出
   logout: (): Promise<void> =>
-    authAPI.post('/logout'),
+    apiClient.post('/logout'),
 
   // 忘记密码
   forgotPassword: (email: string): Promise<{ status: string; message: string }> =>
-    authAPI.post('/forgot-password', { email }),
+    apiClient.post('/forgot-password', { email }),
 
   // 重置密码
   resetPassword: (token: string, password: string): Promise<{ status: string; message: string }> =>
-    authAPI.post('/reset-password', { token, password }),
+    apiClient.post('/reset-password', { token, password }),
 };
