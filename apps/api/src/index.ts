@@ -9,22 +9,22 @@ import dotenv from 'dotenv';
 import path from 'path';
 
 // 导入路由和中间件
-import { errorHandler } from '@/middleware/errorHandler';
-import { notFound } from '@/middleware/notFound';
-import { rateLimiter } from '@/middleware/rateLimiter';
-import { authMiddleware } from '@/middleware/auth';
-import { logger } from '@/utils/logger';
-import { connectDatabase } from '@/database/connection';
-import { setupSocketIO } from '@/services/socketService';
+import { errorHandler } from './middleware/errorHandler';
+import { notFound } from './middleware/notFound';
+import { rateLimiter } from './middleware/rateLimiter';
+import { authMiddleware } from './middleware/auth';
+import { logger } from './utils/logger';
+import { connectDatabase } from './database/connection';
+import { setupSocketIO } from './services/socketService';
 
 // 导入路由
-import authRoutes from '@/routes/auth';
-import userRoutes from '@/routes/users';
-import pageRoutes from '@/routes/pages';
-import mediaRoutes from '@/routes/media';
-import categoryRoutes from '@/routes/categories';
-import tagRoutes from '@/routes/tags';
-import settingRoutes from '@/routes/settings';
+import authRoutes from './routes/auth';
+import userRoutes from './routes/users';
+import pageRoutes from './routes/pages';
+import mediaRoutes from './routes/media';
+import categoryRoutes from './routes/categories';
+import tagRoutes from './routes/tags';
+import settingRoutes from './routes/settings';
 
 // 加载环境变量
 dotenv.config();

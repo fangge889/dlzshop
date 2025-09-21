@@ -3,238 +3,346 @@ import {
   Form, 
   Input, 
   Button, 
-  Space, 
-  Typography, 
   Card, 
+  Space, 
   Select, 
   Switch,
-  message,
   Row,
-  Col 
+  Col,
+  Typography,
+  message,
+  Spin,
+  Divider
 } from 'antd';
-import { SaveOutlined, EyeOutlined, SendOutlined } from '@ant-design/icons';
-import { useParams, useNavigate } from 'react-router-dom';
+import { 
+  SaveOutlined, 
+  EyeOutlined, 
+  SendOutlined,
+  ArrowLeftOutlined 
+} from '@ant-design/icons';
 import { Helmet } from 'react-helmet-async';
+import { useNavigate, useParams } from 'react-router-dom';
 
-import { useAppDispatch, useAppSelector } from '@/hooks/redux';
-import { fetchPage } from '@/store/slices/contentSlice';
+import { RichTextEditor } from '../../components/Editor';
+import { useAppSelector, useAppDispatch } from '../../hooks/redux';
+import { fetchPage } from '../../store/slices/contentSlice';
 
-const { Title } = Typography;
-const { TextArea } = Input;
+const { Title, Text } = Typography;
 const { Option } = Select;
+const { TextArea } = Input;
+
+interface PageFormData {
+  title: string;
+  slug: string;
+  content: string;
+  excerpt: string;
+  layout: string;
+  template?: string;
+  status: 'DRAFT' | 'PUBLISHED' | 'ARCHIVED';
+  featuredImage?: string;
+  metaTitle?: string;
+  metaDescription?: string;
+  metaKeywords?: string;
+}
 
 const PageEditorPage: React.FC = () => {
-  const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const [form] = Form.useForm();
-  const [saving, setSaving] = useState(false);
-  
+  const { id } = useParams<{ id: string }>();
+  const { user } = useAppSelector(state => state.auth);
   const { currentPage, loading } = useAppSelector(state => state.content);
-  const isEditing = !!id && id !== 'new';
+  
+  const [form] = Form.useForm<PageFormData>();
+  const [saving, setSaving] = useState(false);
+  const [content, setContent] = useState('');
+  const [previewMode, setPreviewMode] = useState(false);
 
+  const isEditing = Boolean(id && id !== 'new');
+
+  // 加载页面数据
   useEffect(() => {
     if (isEditing) {
       dispatch(fetchPage(id));
     }
   }, [dispatch, id, isEditing]);
 
+  // 设置表单数据
   useEffect(() => {
     if (currentPage && isEditing) {
-      form.setFieldsValue({
+      const pageData: PageFormData = {
         title: currentPage.title,
         slug: currentPage.slug,
         content: currentPage.content,
-        excerpt: currentPage.excerpt,
-        status: currentPage.status,
-      });
+        excerpt: currentPage.excerpt || '',
+        layout: 'page',
+        status: currentPage.status as 'DRAFT' | 'PUBLISHED' | 'ARCHIVED',
+        metaTitle: currentPage.metaTitle || '',
+        metaDescription: currentPage.metaDescription || '',
+        metaKeywords: currentPage.metaKeywords || ''
+      };
+      
+      form.setFieldsValue(pageData);
+      setContent(currentPage.content);
     }
-  }, [currentPage, form, isEditing]);
+  }, [currentPage, isEditing, form]);
 
-  const handleSave = async (values: any) => {
-    setSaving(true);
+  // 自动生成slug
+  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const title = e.target.value;
+    if (!isEditing) {
+      const slug = title
+        .toLowerCase()
+        .replace(/[^a-z0-9\u4e00-\u9fa5]+/g, '-')
+        .replace(/^-+|-+$/g, '');
+      form.setFieldValue('slug', slug);
+    }
+  };
+
+  // 保存页面
+  const handleSave = async (status?: 'DRAFT' | 'PUBLISHED') => {
     try {
-      // 这里应该调用保存 API
-      await new Promise(resolve => setTimeout(resolve, 1000)); // 模拟 API 调用
-      message.success(isEditing ? '页面更新成功' : '页面创建成功');
+      setSaving(true);
+      const values = await form.validateFields();
+      
+      const pageData = {
+        ...values,
+        content,
+        status: status || values.status,
+        authorId: user?.id
+      };
+
+      console.log('保存页面数据:', pageData);
+      
+      // 这里应该调用API保存页面
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      message.success(status === 'PUBLISHED' ? '页面发布成功' : '页面保存成功');
+      
       if (!isEditing) {
         navigate('/admin/pages');
       }
     } catch (error) {
-      message.error('保存失败');
+      message.error('保存失败，请检查表单数据');
     } finally {
       setSaving(false);
     }
   };
 
+  // 预览页面
   const handlePreview = () => {
-    const values = form.getFieldsValue();
-    // 这里可以打开预览窗口或跳转到预览页面
-    message.info('预览功能开发中');
+    setPreviewMode(!previewMode);
   };
 
-  const handlePublish = async () => {
-    try {
-      const values = await form.validateFields();
-      values.status = 'PUBLISHED';
-      await handleSave(values);
-    } catch (error) {
-      message.error('请先完善页面信息');
-    }
-  };
+  if (loading) {
+    return (
+      <div style={{ textAlign: 'center', padding: '50px 0' }}>
+        <Spin size="large" />
+      </div>
+    );
+  }
 
   return (
     <>
       <Helmet>
-        <title>{isEditing ? '编辑页面' : '创建页面'} - DLZ Shop CMS</title>
+        <title>{isEditing ? '编辑页面' : '新建页面'} - DLZ Shop CMS</title>
       </Helmet>
 
       <div className="page-editor fade-in">
-        <div className="page-editor-header">
-          <Title level={2} style={{ margin: 0 }}>
-            {isEditing ? '编辑页面' : '创建页面'}
-          </Title>
-          <Space>
-            <Button icon={<EyeOutlined />} onClick={handlePreview}>
-              预览
-            </Button>
-            <Button 
-              type="primary" 
-              icon={<SaveOutlined />} 
-              loading={saving}
-              onClick={() => form.submit()}
-            >
-              保存草稿
-            </Button>
-            <Button 
-              type="primary" 
-              icon={<SendOutlined />} 
-              loading={saving}
-              onClick={handlePublish}
-              style={{ background: '#52c41a', borderColor: '#52c41a' }}
-            >
-              发布
-            </Button>
-          </Space>
+        {/* 头部操作栏 */}
+        <div style={{ marginBottom: 24 }}>
+          <Row justify="space-between" align="middle">
+            <Col>
+              <Space>
+                <Button 
+                  icon={<ArrowLeftOutlined />} 
+                  onClick={() => navigate('/admin/pages')}
+                >
+                  返回列表
+                </Button>
+                <Title level={2} style={{ margin: 0 }}>
+                  {isEditing ? '编辑页面' : '新建页面'}
+                </Title>
+              </Space>
+            </Col>
+            <Col>
+              <Space>
+                <Button 
+                  icon={<EyeOutlined />}
+                  onClick={handlePreview}
+                  type={previewMode ? 'primary' : 'default'}
+                >
+                  {previewMode ? '编辑模式' : '预览模式'}
+                </Button>
+                <Button 
+                  icon={<SaveOutlined />}
+                  onClick={() => handleSave('DRAFT')}
+                  loading={saving}
+                >
+                  保存草稿
+                </Button>
+                <Button 
+                  type="primary"
+                  icon={<SendOutlined />}
+                  onClick={() => handleSave('PUBLISHED')}
+                  loading={saving}
+                >
+                  发布页面
+                </Button>
+              </Space>
+            </Col>
+          </Row>
         </div>
 
-        <Form
-          form={form}
-          layout="vertical"
-          onFinish={handleSave}
-          initialValues={{
-            status: 'DRAFT',
-          }}
-        >
-          <Row gutter={24}>
-            <Col span={18}>
-              <Card title="页面内容" style={{ marginBottom: 24 }}>
+        <Row gutter={24}>
+          {/* 主编辑区域 */}
+          <Col xs={24} lg={previewMode ? 12 : 18}>
+            <Card>
+              <Form
+                form={form}
+                layout="vertical"
+                initialValues={{
+                  layout: 'page',
+                  status: 'DRAFT'
+                }}
+              >
                 <Form.Item
                   name="title"
                   label="页面标题"
                   rules={[{ required: true, message: '请输入页面标题' }]}
                 >
                   <Input 
-                    placeholder="输入页面标题" 
+                    placeholder="输入页面标题"
                     size="large"
-                    onChange={(e) => {
-                      // 自动生成 slug
-                      const slug = e.target.value
-                        .toLowerCase()
-                        .replace(/[^a-z0-9\u4e00-\u9fa5]/g, '-')
-                        .replace(/-+/g, '-')
-                        .replace(/^-|-$/g, '');
-                      form.setFieldValue('slug', slug);
-                    }}
+                    onChange={handleTitleChange}
                   />
                 </Form.Item>
 
                 <Form.Item
                   name="slug"
-                  label="页面路径"
-                  rules={[
-                    { required: true, message: '请输入页面路径' },
-                    { pattern: /^[a-z0-9-]+$/, message: '路径只能包含小写字母、数字和连字符' }
-                  ]}
+                  label="页面链接"
+                  rules={[{ required: true, message: '请输入页面链接' }]}
                 >
                   <Input 
-                    placeholder="page-url" 
+                    placeholder="page-url"
                     addonBefore="/"
                   />
-                </Form.Item>
-
-                <Form.Item
-                  name="content"
-                  label="页面内容"
-                >
-                  <TextArea
-                    rows={20}
-                    placeholder="输入页面内容（支持 HTML 和 Markdown）"
-                  />
-                </Form.Item>
-              </Card>
-            </Col>
-
-            <Col span={6}>
-              <Card title="页面设置" style={{ marginBottom: 24 }}>
-                <Form.Item
-                  name="status"
-                  label="发布状态"
-                >
-                  <Select>
-                    <Option value="DRAFT">草稿</Option>
-                    <Option value="PUBLISHED">已发布</Option>
-                    <Option value="SCHEDULED">定时发布</Option>
-                    <Option value="ARCHIVED">已归档</Option>
-                  </Select>
                 </Form.Item>
 
                 <Form.Item
                   name="excerpt"
                   label="页面摘要"
                 >
-                  <TextArea
-                    rows={4}
-                    placeholder="输入页面摘要"
-                  />
-                </Form.Item>
-
-                <Form.Item
-                  name="featuredImage"
-                  label="特色图片"
-                >
-                  <Input placeholder="图片 URL" />
-                </Form.Item>
-              </Card>
-
-              <Card title="SEO 设置">
-                <Form.Item
-                  name="metaTitle"
-                  label="SEO 标题"
-                >
-                  <Input placeholder="SEO 标题" />
-                </Form.Item>
-
-                <Form.Item
-                  name="metaDescription"
-                  label="SEO 描述"
-                >
-                  <TextArea
+                  <TextArea 
+                    placeholder="输入页面摘要（可选）"
                     rows={3}
-                    placeholder="SEO 描述"
                   />
                 </Form.Item>
 
-                <Form.Item
-                  name="metaKeywords"
-                  label="关键词"
-                >
-                  <Input placeholder="关键词，用逗号分隔" />
+                <Form.Item label="页面内容">
+                  <RichTextEditor
+                    value={content}
+                    onChange={setContent}
+                    height={500}
+                    placeholder="开始编写页面内容..."
+                  />
                 </Form.Item>
+              </Form>
+            </Card>
+          </Col>
+
+          {/* 预览区域 */}
+          {previewMode && (
+            <Col xs={24} lg={12}>
+              <Card title="预览" style={{ height: 'fit-content' }}>
+                <div 
+                  className="page-preview"
+                  dangerouslySetInnerHTML={{ __html: content }}
+                  style={{
+                    minHeight: 400,
+                    padding: 16,
+                    border: '1px solid #f0f0f0',
+                    borderRadius: 4,
+                    backgroundColor: '#fafafa'
+                  }}
+                />
               </Card>
             </Col>
-          </Row>
-        </Form>
+          )}
+
+          {/* 侧边栏设置 */}
+          <Col xs={24} lg={previewMode ? 24 : 6}>
+            <Space direction="vertical" style={{ width: '100%' }}>
+              {/* 发布设置 */}
+              <Card title="发布设置" size="small">
+                <Form form={form} layout="vertical">
+                  <Form.Item name="status" label="状态">
+                    <Select>
+                      <Option value="DRAFT">草稿</Option>
+                      <Option value="PUBLISHED">已发布</Option>
+                      <Option value="ARCHIVED">已归档</Option>
+                    </Select>
+                  </Form.Item>
+
+                  <Form.Item name="layout" label="页面布局">
+                    <Select>
+                      <Option value="page">标准页面</Option>
+                      <Option value="post">文章页面</Option>
+                      <Option value="landing">落地页</Option>
+                      <Option value="custom">自定义</Option>
+                    </Select>
+                  </Form.Item>
+
+                  <Form.Item name="template" label="页面模板">
+                    <Select placeholder="选择模板（可选）" allowClear>
+                      <Option value="default">默认模板</Option>
+                      <Option value="full-width">全宽模板</Option>
+                      <Option value="sidebar">侧边栏模板</Option>
+                    </Select>
+                  </Form.Item>
+                </Form>
+              </Card>
+
+              {/* SEO设置 */}
+              <Card title="SEO设置" size="small">
+                <Form form={form} layout="vertical">
+                  <Form.Item name="metaTitle" label="SEO标题">
+                    <Input placeholder="页面SEO标题" />
+                  </Form.Item>
+
+                  <Form.Item name="metaDescription" label="SEO描述">
+                    <TextArea 
+                      placeholder="页面SEO描述"
+                      rows={3}
+                      showCount
+                      maxLength={160}
+                    />
+                  </Form.Item>
+
+                  <Form.Item name="metaKeywords" label="关键词">
+                    <Input placeholder="关键词，用逗号分隔" />
+                  </Form.Item>
+                </Form>
+              </Card>
+
+              {/* 特色图片 */}
+              <Card title="特色图片" size="small">
+                <Form form={form} layout="vertical">
+                  <Form.Item name="featuredImage">
+                    <div style={{ 
+                      border: '1px dashed #d9d9d9',
+                      borderRadius: 4,
+                      padding: 16,
+                      textAlign: 'center',
+                      cursor: 'pointer'
+                    }}>
+                      <Text type="secondary">点击选择特色图片</Text>
+                    </div>
+                  </Form.Item>
+                </Form>
+              </Card>
+            </Space>
+          </Col>
+        </Row>
       </div>
     </>
   );

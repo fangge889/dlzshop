@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { Prisma } from '@prisma/client';
-import { logger } from '@/utils/logger';
+import { logger } from '../utils/logger';
 
 export interface AppError extends Error {
   statusCode?: number;
@@ -83,9 +83,9 @@ function sendErrorProd(err: AppError, res: Response): void {
 // 全局错误处理中间件
 export function errorHandler(
   err: any,
-  req: Request,
+  _req: Request,
   res: Response,
-  next: NextFunction
+  _next: NextFunction
 ): void {
   err.statusCode = err.statusCode || 500;
   err.status = err.status || 'error';
