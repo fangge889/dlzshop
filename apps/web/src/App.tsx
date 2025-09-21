@@ -20,6 +20,11 @@ import SettingsPage from './pages/admin/SettingsPage';
 import HomePage from './pages/public/HomePage';
 import NotFoundPage from './pages/NotFoundPage';
 import TestPageBuilder from './pages/TestPageBuilder';
+import { TestWorkflow } from './pages/TestWorkflow';
+import { TestIndex } from './pages/TestIndex';
+import { TestGuide } from './pages/TestGuide';
+import { StepByStepTest } from './pages/StepByStepTest';
+import { TestLogin } from './pages/TestLogin';
 
 import './App.css';
 
@@ -65,7 +70,12 @@ const App: React.FC = () => {
           </Route>
 
           {/* 测试页面 */}
+          <Route path="/test" element={<TestIndex />} />
+          <Route path="/test/login" element={<TestLogin />} />
+          <Route path="/test/guide" element={<TestGuide />} />
+          <Route path="/test/steps" element={<StepByStepTest />} />
           <Route path="/test/page-builder" element={<TestPageBuilder />} />
+          <Route path="/test/workflow" element={<TestWorkflow />} />
 
           {/* 404 页面 */}
           <Route path="*" element={<NotFoundPage />} />

@@ -242,8 +242,8 @@ const PageEditorPage: React.FC = () => {
                   <RichTextEditor
                     value={content}
                     onChange={setContent}
-                    height={500}
                     placeholder="开始编写页面内容..."
+                    style={{ minHeight: 500 }}
                   />
                 </Form.Item>
               </Form>
