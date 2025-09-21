@@ -15,7 +15,7 @@ model User {
   username    String    @unique
   email       String    @unique
   passwordHash String   @map("password_hash")
-  role        Role      @default(EDITOR)
+  role        String    @default("EDITOR")
   avatarUrl   String?   @map("avatar_url")
   isActive    Boolean   @default(true) @map("is_active")
   lastLogin   DateTime? @map("last_login")
@@ -27,6 +27,7 @@ model User {
   mediaFiles    MediaFile[]
   pageVersions  PageVersion[]
   comments      Comment[]
+  products      Product[]
 
   @@map("users")
 }
@@ -40,7 +41,7 @@ model Page {
   excerpt         String?
   layout          String    @default("page")
   template        String?
-  status          PageStatus @default(DRAFT)
+  status          String @default("DRAFT")
   featuredImage   String?   @map("featured_image")
   metaTitle       String?   @map("meta_title")
   metaDescription String?   @map("meta_description")
@@ -77,6 +78,7 @@ model Category {
 
   // 关联关系
   pages       PageCategory[]
+  products    ProductCategory[]
 
   @@map("categories")
 }
@@ -153,7 +155,7 @@ model PageVersion {
 model Comment {
   id        Int           @id @default(autoincrement())
   content   String
-  status    CommentStatus @default(PENDING)
+  status    String @default("PENDING")
   createdAt DateTime      @default(now()) @map("created_at")
   updatedAt DateTime      @updatedAt @map("updated_at")
 
@@ -181,24 +183,117 @@ model Setting {
   @@map("settings")
 }
 
-// 枚举类型
-enum Role {
-  ADMIN
-  EDITOR
-  AUTHOR
-  SUBSCRIBER
+// 商品表
+model Product {
+  id          Int       @id @default(autoincrement())
+  name        String
+  slug        String    @unique
+  description String?
+  shortDesc   String?   @map("short_desc")
+  price       Float
+  comparePrice Float?   @map("compare_price")
+  costPrice   Float?    @map("cost_price")
+  sku         String?   @unique
+  barcode     String?
+  
+  // 库存管理
+  trackQuantity Boolean @default(true) @map("track_quantity")
+  quantity     Int     @default(0)
+  lowStockThreshold Int @default(10) @map("low_stock_threshold")
+  
+  // 商品状态
+  status      String @default("DRAFT")
+  isVisible   Boolean @default(true) @map("is_visible")
+  isFeatured  Boolean @default(false) @map("is_featured")
+  
+  // SEO优化
+  metaTitle       String? @map("meta_title")
+  metaDescription String? @map("meta_description")
+  
+  // 商品属性
+  weight      Float?
+  dimensions  String? // JSON格式存储长宽高
+  material    String?
+  brand       String?
+  
+  // 时间戳
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+  publishedAt DateTime? @map("published_at")
+  
+  // 外键
+  authorId    Int       @map("author_id")
+  author      User      @relation(fields: [authorId], references: [id])
+  
+  // 关联关系
+  categories  ProductCategory[]
+  images      ProductImage[]
+  variants    ProductVariant[]
+  
+  @@index([status])
+  @@index([createdAt])
+  @@map("products")
 }
 
-enum PageStatus {
-  DRAFT
-  PUBLISHED
-  ARCHIVED
-  SCHEDULED
+// 商品分类关联表
+model ProductCategory {
+  productId  Int
+  categoryId Int
+  product    Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@id([productId, categoryId])
+  @@map("product_categories")
 }
 
-enum CommentStatus {
-  PENDING
-  APPROVED
-  REJECTED
-  SPAM
+// 商品图片表
+model ProductImage {
+  id        Int     @id @default(autoincrement())
+  url       String
+  altText   String? @map("alt_text")
+  sortOrder Int     @default(0) @map("sort_order")
+  isMain    Boolean @default(false) @map("is_main")
+  
+  // 关联商品
+  productId Int     @map("product_id")
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  
+  @@index([productId])
+  @@map("product_images")
 }
+
+// 商品规格表（尺码、颜色等）
+model ProductVariant {
+  id           Int     @id @default(autoincrement())
+  title        String
+  price        Float?
+  comparePrice Float?  @map("compare_price")
+  sku          String? @unique
+  barcode      String?
+  
+  // 库存
+  quantity Int @default(0)
+  
+  // 规格选项 (JSON格式存储，如: {"size": "M", "color": "红色"})
+  options  String
+  
+  // 图片
+  image    String?
+  
+  // 状态
+  isActive Boolean @default(true) @map("is_active")
+  
+  // 关联商品
+  productId Int     @map("product_id")
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  
+  @@index([productId])
+  @@map("product_variants")
+}
+

@@ -25,6 +25,8 @@ import { TestIndex } from './pages/TestIndex';
 import { TestGuide } from './pages/TestGuide';
 import { StepByStepTest } from './pages/StepByStepTest';
 import { TestLogin } from './pages/TestLogin';
+import { PublishedPages } from './pages/public/PublishedPages';
+import { PageDetail } from './pages/public/PageDetail';
 
 import './App.css';
 
@@ -44,6 +46,10 @@ const App: React.FC = () => {
           <Route path="/" element={<PublicLayout />}>
             <Route index element={<HomePage />} />
           </Route>
+          
+          {/* 已发布内容页面 */}
+          <Route path="/published" element={<PublishedPages />} />
+          <Route path="/page/:slug" element={<PageDetail />} />
 
           {/* 认证路由 */}
           <Route path="/auth/login" element={

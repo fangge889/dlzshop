@@ -25,6 +25,8 @@ import mediaRoutes from './routes/media';
 import categoryRoutes from './routes/categories';
 import tagRoutes from './routes/tags';
 import settingRoutes from './routes/settings';
+const productsRouter = require('./routes/products');
+const categoriesRouter = require('./routes/categories');
 
 // 加载环境变量
 dotenv.config();
@@ -66,6 +68,8 @@ app.use('/api/media', authMiddleware, mediaRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/tags', tagRoutes);
 app.use('/api/settings', authMiddleware, settingRoutes);
+app.use('/api/products', productsRouter);
+app.use('/api/shop/categories', categoriesRouter);
 
 // 健康检查
 app.get('/health', (_req, res) => {
