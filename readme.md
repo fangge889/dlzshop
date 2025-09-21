@@ -1,276 +1,310 @@
-# Miccall Theme Readme
-###### version 1.2.0
- 
+# DLZ Shop CMS - 现代化内容管理系统
 
-## Contents 目录
+基于 React + Node.js + TypeScript 构建的现代化 CMS 系统，采用 Monorepo 架构，提供完整的内容管理解决方案。
 
-- General 概括
-- Demo 演示
-- Quick start 快速开始
-- Docs 文档
-- Contributing 贡献
-- License 许可证
+## 🚀 项目特性
 
-## General概括
+- **现代化技术栈**: React 18 + Node.js + TypeScript + Prisma
+- **Monorepo 架构**: 使用 pnpm workspace 管理多包项目
+- **响应式设计**: 基于 Ant Design 的现代化 UI
+- **实时协作**: WebSocket 支持的实时编辑功能
+- **安全认证**: JWT + RBAC 权限控制
+- **性能优化**: 代码分割、懒加载、缓存策略
+- **开发体验**: 热重载、TypeScript、ESLint、Prettier
 
-- 主题开发 套用了大量的[HTML5 UP][2] 
-
-## Demo 演示
-
-
-
-主题文章列表: 
-<img src="http://onh0umlhz.bkt.clouddn.com/githubhexothemereadmesecond.png" width="100%" />
-主题文章主页: 
-<img src="http://onh0umlhz.bkt.clouddn.com/githubhexothemereadmepost.png" width="100%" />
-主题图库页: 
-<img src="http://onh0umlhz.bkt.clouddn.com/githubhexothemereadmegallery.png" width="100%" />
-
-## Quick start 快速开始
-
-- 请仔细阅读 Hexo 的官方文档，完成对 Hexo 的[安装](https://hexo.io/zh-cn/docs/index.html#%E5%AE%89%E8%A3%85)和[基本的配置](https://hexo.io/zh-cn/docs/configuration.html)。
-
-- 下载本主题并且放置于`themes`目录下，更改主题名字，并在站点根目录的配置文件`_config.yml`中启用该主题。
+## 📁 项目结构
 
 ```
-    # Extensions
-    ## Plugins: https://hexo.io/plugins/
-    ## Themes: https://hexo.io/themes/
-    theme: miccall
-
-```
-- 在主题的配置文件`_config.yml`中修改相应的值。
-
-## Docs 文档
-
-以下内容均为主题的配置文件 `_config.yml`内容（请区别于站点的配置文件）。
-
-##### 一 . head标签下 
-
-1.网站的logo 
-    **favicon:** "/img/logo_miccall.png"
-
-2.搜索的关键字 :
-keywords提供的网页关键词通常是为搜索引擎分类网页使用的；
-可以为网页提供多个关键词，多个关键词应该使用空格分开；
-不要给网页定义过多的关键词，最好保持在10个以下，过多的关键词，搜索引擎将忽略；
-不要给网页定义与网页描述内容无关的关键词；
-由于网页制作者滥用keywords(提供过多的关键词或者提供与网页无关的关键词)，导致目前常用的搜索引擎降低了keywords的重要性。
-    **keywords:** miccall
-
-3.主页背景图片：默认链接是在主站以下目录的 "img/bg.jpg" 就代表"miccall.tech/img/bg.jpg" 暂不支持外链
-    **backgroundpic :** "img/bg.jpg"
-
-
-##### 二 . Intro: 主题刚开始加载的界面
-    
-1.名字 
-    **name:** MICCALL
-
-2.第二标语
-    **slogan:** "Whatever is worth doing is worth doing well I'll think of you every step of the way"
-
-3.主页按钮上面的文字     
-    **HeadButton:** MICCALL
-
-##### 三 .Nav: 导航栏
-
-```    
-    Home_name: 主页 # 主页名字
-    is_use_categories : true # 是否启用分类
-    categories_name: 分类 # 分类名字
-    is_use_archives : false # 是否启用归档
-    archives_name: 归档 # 归档名字
-    icon: # 导航栏上的图标
-        github:
-            use: true # 是否启用
-            link: https://github.com/miccall # 点击地址
-        Twitter:
-            use: false
-            link:
-        Facebook:
-            use: false
-            link:
-        Instagram:
-            use: false
-            link:
-    pages:
-    # 自定义连接页
-    # link 的参数为相对路径，对应 hexo 目录下的 source 件夹内的相应文件夹
-        简历:
-            link: "/about/"
-        团队 :
-            link: "/group/"
-        图库 :
-            link: "/gallery/"
-        标签:
-            link: "/tag/"
-        #自定义标签名
-        #   link：“路径”
-
-    MainFirst: # 导航栏下面的主页
-        name: Miccall Metro # 大标题名字
-        description: Welcome to my Blog   # 第二标签 描述
-        pic_url: /img/me.jpg # 图片地址
-        goto_ulr: "" # 点击跳转
-
-    Gallery: # 图库页
-        title: Mr.metro
-        description: Just another fine responsive
+dlzshop-cms/
+├── apps/
+│   ├── api/                 # 后端 API 服务
+│   │   ├── src/
+│   │   │   ├── controllers/ # 控制器
+│   │   │   ├── middleware/  # 中间件
+│   │   │   ├── models/      # 数据模型
+│   │   │   ├── routes/      # 路由
+│   │   │   ├── schemas/     # 验证模式
+│   │   │   └── utils/       # 工具函数
+│   │   └── prisma/          # 数据库模式
+│   └── web/                 # 前端应用
+│       ├── src/
+│       │   ├── components/  # 组件
+│       │   ├── pages/       # 页面
+│       │   ├── store/       # 状态管理
+│       │   ├── services/    # API 服务
+│       │   └── types/       # 类型定义
+│       └── public/          # 静态资源
+├── packages/                # 共享包
+└── docs/                    # 文档
 ```
 
-使用方法 ：
+## 🛠️ 技术栈
 
-1. 创建「about」页面
+### 前端
+- **框架**: React 18 + TypeScript
+- **构建工具**: Vite
+- **UI 库**: Ant Design
+- **状态管理**: Redux Toolkit + RTK Query
+- **路由**: React Router v6
+- **样式**: CSS Modules + Styled Components
+- **富文本编辑**: Quill.js
+- **图表**: Chart.js
 
-    - 在站点根目录的`source`目录，新建一个`about`目录，这个文件目录与 `link: "/about/"`所对应，在里面创建一个 `index.md` 文件，在此创作 `about`内容。
+### 后端
+- **运行时**: Node.js + TypeScript
+- **框架**: Express.js
+- **数据库**: PostgreSQL + Prisma ORM
+- **认证**: JWT + Passport.js
+- **文件上传**: Multer + Sharp
+- **实时通信**: Socket.io
+- **日志**: Winston
+- **缓存**: Redis
 
-1. 创建「group」页面
+### 开发工具
+- **包管理**: pnpm
+- **代码规范**: ESLint + Prettier
+- **类型检查**: TypeScript
+- **测试**: Jest + React Testing Library
+- **容器化**: Docker + Docker Compose
 
-    - 在站点根目录的`source`目录，新建一个`group`目录，这个文件目录与`link: "/group/"`所对应，在里面创建一个`index.md`文件。
-    - `front-matter`里面添加属性
+## 🚀 快速开始
 
-        ```
-        ---
-        title: group
-        date: 2017-01-17 21:05:04
-        layout: links
-        ---
-        ```
-    - 然后在站点根目录的 `source`目录` _data`目录(没有的话新建一个)。然后在里面新建一个`links.yml`文件，多成员依次添加。
-        ```
-        # 成员1
-        名称 :
-              link: 点击连接地址   
-              avatar: 头像地址
-              descr: 描述
-        # 成员2
-        名称 :
-              link: 点击连接地址   
-              avatar: 头像地址
-              descr: 描述
-        ```
+### 环境要求
 
-1. 创建「gallery」页面
+- Node.js >= 18.0.0
+- pnpm >= 8.0.0
+- PostgreSQL >= 14.0
+- Redis >= 6.0 (可选)
 
-    - 在站点根目录的`source`目录，新建一个`galler`y目录，这个文件目录与`link: "/gallery/"`所对应 ，在里面创建一个`index.md`文件, `front-matter`里面添加属性
+### 安装依赖
 
-        ```
-        ---
-        title: Gallery
-        date: 2017-01-17 21:39:03
-        layout: gallery
-        ---
-        ```
+```bash
+# 安装 pnpm (如果未安装)
+npm install -g pnpm
 
-    - 然后在站点根目录的`source`目录 `_data`目录(没有的话新建一个)。然后在里面新建一个`gallery.yml`文件，多图片依次添加，图片名称不要重复。
+# 安装项目依赖
+pnpm install
+```
 
-        ```
-        图片名称1:
-          full_link: 图片地址
-          thumb_link: 略缩图地址
-          descr: 图片描述
-        图片名称2:
-          full_link: 图片地址
-          thumb_link: 略缩图地址
-          descr: 图片描述
-        ```
+### 环境配置
 
-1. 创建「tag」页面
+1. 复制环境变量文件：
+```bash
+cp apps/api/.env.example apps/api/.env
+cp apps/web/.env.example apps/web/.env
+```
 
+2. 配置数据库连接和其他环境变量
 
-    - 在站点根目录的`source`目录，新建一个`tag`目录，这个文件目录与`link: "/tag/"`所对应  ，在里面创建一个`index.md `文件，`front-matter`里面添加属性。
+### 数据库设置
 
-        ```
-        ---
-        title: tags
-        date: 2017-01-17 21:39:14
-        layout: tags
-        ---
-        ```
-1. 修改背景图片：更换`\themes\miccall\source\images`中的`bg.jpg`，不要改名，否则需要更改CSS内容。
+```bash
+# 生成 Prisma 客户端
+pnpm --filter @dlzshop/api prisma generate
 
-1. 修改导航栏下面的个人图片：更换`\themes\miccall\source\img`中的`me.jpg`，不要改名，否则需要更改CSS内容。
+# 运行数据库迁移
+pnpm --filter @dlzshop/api prisma migrate dev
 
-1. 字体文件不建议修改。
+# 填充初始数据
+pnpm --filter @dlzshop/api prisma db seed
+```
 
-1. 评论系统：`use`的配置选项`false | duoshuo | disqus | disqus_click | changyan`
+### 启动开发服务器
 
-    ```
-    comment:
-       use: disqus_click
-       shortname: http-miccall-tech
-       duoshuo_thread_key_type: path
-       duoshuo_embed_js_url: "https://static.duoshuo.com/embed.js"
-       changyan_appid:
-       changyan_conf:
-       changyan_thread_key_type: path
-    ```
+```bash
+# 启动所有服务
+pnpm dev
 
-1. 搜索系统：
+# 或分别启动
+pnpm --filter @dlzshop/api dev    # 后端服务 (端口 3001)
+pnpm --filter @dlzshop/web dev    # 前端服务 (端口 3000)
+```
 
-    ```
-    search:
-      use: google
-      swiftype_key: Just another fine responsive  
-    ```
+### 使用 Docker 开发
 
-1. 访问量系统
+```bash
+# 启动开发环境
+docker-compose -f docker-compose.dev.yml up
 
-    ```
-    Leancloud Views
-    leancloud:
-        enable: false
-        app_id: # 你的 app_id
-        app_key: # 你的 app_key
-        av_core_mini: "https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"
-    ```
+# 后台运行
+docker-compose -f docker-compose.dev.yml up -d
+```
 
+## 📚 功能模块
 
-    ```
-    busuanzi:
-      enable: true  #  是否开启
-      all_site_uv: true # 全局启用
-      post_pv: true # 单独文章启用
-      busuanzi_pure_mini_js: "https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"
-    ```
+### 🔐 用户认证
+- 用户注册/登录
+- JWT 令牌认证
+- 角色权限管理 (Admin/Editor/Author)
+- 密码重置
 
-1. 开始创作你的文章：文章目录在`blog/source/_post`目录下新建一个`.md`文件：
+### 📝 内容管理
+- 页面创建/编辑
+- 富文本编辑器
+- 草稿/发布状态
+- SEO 优化设置
+- 媒体库管理
 
-    ```
-    ---
-    title: # 文章标题  
-    date: 2017/3/27 13:48:25  # 文章发表时间
-    tags:
-    - 标签1
-    - 标签2 (可选)
-    categories: Algorithm # 分类
-    thumbnail: https://xxxxxxxxxx.png # 略缩图
-    ---
+### 🎨 界面管理
+- 响应式后台界面
+- 主题定制
+- 多语言支持
+- 实时预览
 
-    文章正文
+### 📊 数据分析
+- 访问统计
+- 内容分析
+- 用户行为追踪
+- 性能监控
 
-    ```
+## 🔧 开发指南
 
-### 代码高亮
+### 代码规范
 
-安装组件参阅http://github.com/ele828/hexo-prism-plugin
+项目使用 ESLint 和 Prettier 确保代码质量：
 
-## Contributing 贡献
+```bash
+# 检查代码规范
+pnpm lint
 
-欢迎各种形式的贡献，包括但不限于优化，添加功能，文档 & 代码的改进，问题和 bugs 的报告。期待您的 Pull Request。
+# 自动修复
+pnpm lint:fix
 
-- 感谢 [@moecopilot](https://github.com/moecopilot) 的贡献 ： 修复了文章链接 (已更新)
-- 更改了画廊中图片为居中及缩放(已更新)
-- 主页上会显示categories而不显示tag(涉及到排版问题，没有采用)
-- 感谢 [@sli1989](https://github.com/sli1989) 的贡献 ： 修复了主页 me.jpg的设置问题 (已更新)
-- 感谢 [@staunchkai](https://github.com/staunchkai)的贡献 : 1. 添加 Valine 评论 
-- 2. 导航栏社交图标自定义 
-- 感谢 [@acupt](https://github.com/acupt)的贡献 ：1、修复了https网站引用 ‘bootstrap.min.css’ 和 ‘font-awesome.min.css’ 文件错误的问题
-- 2、links.yml不配置属性link/qq/wachat/weibo则不显示图标
+# 格式化代码
+pnpm format
+```
 
-## License 许可证
+### 测试
 
-license
-Open sourced under the GPL v3.0 license.
-根据 GPL V3.0 许可证开源。
+```bash
+# 运行所有测试
+pnpm test
+
+# 运行测试并生成覆盖率报告
+pnpm test:coverage
+
+# 监听模式运行测试
+pnpm test:watch
+```
+
+### 构建
+
+```bash
+# 构建所有应用
+pnpm build
+
+# 构建特定应用
+pnpm --filter @dlzshop/web build
+pnpm --filter @dlzshop/api build
+```
+
+## 🚀 部署
+
+### 生产环境构建
+
+```bash
+# 构建生产版本
+pnpm build
+
+# 使用 Docker 构建
+docker build -t dlzshop-cms .
+```
+
+### 环境变量
+
+生产环境需要配置以下环境变量：
+
+```env
+# 数据库
+DATABASE_URL=postgresql://user:password@localhost:5432/dlzshop
+
+# JWT 密钥
+JWT_SECRET=your-super-secret-jwt-key
+
+# 文件上传
+UPLOAD_PATH=/uploads
+MAX_FILE_SIZE=10485760
+
+# Redis (可选)
+REDIS_URL=redis://localhost:6379
+
+# 邮件服务 (可选)
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_USER=your-email@gmail.com
+SMTP_PASS=your-app-password
+```
+
+## 📖 API 文档
+
+API 文档可通过以下方式访问：
+
+- 开发环境: http://localhost:3001/api-docs
+- Swagger UI 界面提供完整的 API 文档
+
+### 主要 API 端点
+
+```
+POST   /api/auth/login          # 用户登录
+POST   /api/auth/register       # 用户注册
+GET    /api/pages               # 获取页面列表
+POST   /api/pages               # 创建页面
+GET    /api/pages/:id           # 获取页面详情
+PUT    /api/pages/:id           # 更新页面
+DELETE /api/pages/:id           # 删除页面
+POST   /api/media/upload        # 文件上传
+```
+
+## 🤝 贡献指南
+
+1. Fork 项目
+2. 创建功能分支 (`git checkout -b feature/AmazingFeature`)
+3. 提交更改 (`git commit -m 'Add some AmazingFeature'`)
+4. 推送到分支 (`git push origin feature/AmazingFeature`)
+5. 创建 Pull Request
+
+## 📄 许可证
+
+本项目采用 MIT 许可证 - 查看 [LICENSE](LICENSE) 文件了解详情。
+
+## 🙏 致谢
+
+- [React](https://reactjs.org/) - 用户界面库
+- [Ant Design](https://ant.design/) - 企业级 UI 设计语言
+- [Prisma](https://www.prisma.io/) - 现代数据库工具包
+- [Express.js](https://expressjs.com/) - Web 应用框架
+
+## 📞 支持
+
+如果您有任何问题或建议，请通过以下方式联系我们：
+
+- 创建 [Issue](https://github.com/your-username/dlzshop-cms/issues)
+- 发送邮件至: support@dlzshop.com
+- 访问我们的 [文档站点](https://docs.dlzshop.com)
+
+---
+
+⭐ 如果这个项目对您有帮助，请给我们一个 Star！
+
+## 🎯 升级进度
+
+### ✅ 已完成
+- [x] 项目结构重构 (Monorepo)
+- [x] TypeScript 配置
+- [x] 前端应用基础架构 (React + Vite + Ant Design)
+- [x] 后端 API 基础架构 (Express + Prisma)
+- [x] 用户认证系统
+- [x] 页面管理功能
+- [x] 媒体库管理
+- [x] 响应式管理界面
+
+### 🚧 进行中
+- [ ] 依赖包安装完成
+- [ ] 数据库初始化
+- [ ] 开发服务器启动测试
+
+### 📋 待完成
+- [ ] 实时协作功能
+- [ ] 性能优化
+- [ ] 测试覆盖
+- [ ] 生产环境部署

@@ -1,0 +1,204 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          Int       @id @default(autoincrement())
+  username    String    @unique
+  email       String    @unique
+  passwordHash String   @map("password_hash")
+  role        Role      @default(EDITOR)
+  avatarUrl   String?   @map("avatar_url")
+  isActive    Boolean   @default(true) @map("is_active")
+  lastLogin   DateTime? @map("last_login")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+
+  // 关联关系
+  pages         Page[]
+  mediaFiles    MediaFile[]
+  pageVersions  PageVersion[]
+  comments      Comment[]
+
+  @@map("users")
+}
+
+model Page {
+  id              Int       @id @default(autoincrement())
+  pageId          String    @unique @map("page_id")
+  title           String
+  slug            String    @unique
+  content         String?
+  excerpt         String?
+  layout          String    @default("page")
+  template        String?
+  status          PageStatus @default(DRAFT)
+  featuredImage   String?   @map("featured_image")
+  metaTitle       String?   @map("meta_title")
+  metaDescription String?   @map("meta_description")
+  metaKeywords    String?   @map("meta_keywords")
+  publishedAt     DateTime? @map("published_at")
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+
+  // 外键
+  authorId        Int       @map("author_id")
+  author          User      @relation(fields: [authorId], references: [id])
+
+  // 关联关系
+  categories      PageCategory[]
+  tags            PageTag[]
+  versions        PageVersion[]
+  comments        Comment[]
+
+  @@map("pages")
+}
+
+model Category {
+  id          Int       @id @default(autoincrement())
+  name        String
+  slug        String    @unique
+  description String?
+  sortOrder   Int       @default(0) @map("sort_order")
+  createdAt   DateTime  @default(now()) @map("created_at")
+
+  // 自关联 - 父子分类
+  parentId    Int?      @map("parent_id")
+  parent      Category? @relation("CategoryParent", fields: [parentId], references: [id])
+  children    Category[] @relation("CategoryParent")
+
+  // 关联关系
+  pages       PageCategory[]
+
+  @@map("categories")
+}
+
+model Tag {
+  id          Int       @id @default(autoincrement())
+  name        String    @unique
+  slug        String    @unique
+  description String?
+  createdAt   DateTime  @default(now()) @map("created_at")
+
+  // 关联关系
+  pages       PageTag[]
+
+  @@map("tags")
+}
+
+model PageCategory {
+  pageId     Int
+  categoryId Int
+  page       Page     @relation(fields: [pageId], references: [id], onDelete: Cascade)
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@id([pageId, categoryId])
+  @@map("page_categories")
+}
+
+model PageTag {
+  pageId Int
+  tagId  Int
+  page   Page @relation(fields: [pageId], references: [id], onDelete: Cascade)
+  tag    Tag  @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([pageId, tagId])
+  @@map("page_tags")
+}
+
+model MediaFile {
+  id           Int      @id @default(autoincrement())
+  filename     String
+  originalName String   @map("original_name")
+  filePath     String   @map("file_path")
+  fileSize     Int      @map("file_size")
+  mimeType     String   @map("mime_type")
+  width        Int?
+  height       Int?
+  altText      String?  @map("alt_text")
+  caption      String?
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  // 外键
+  uploadedBy   Int      @map("uploaded_by")
+  uploader     User     @relation(fields: [uploadedBy], references: [id])
+
+  @@map("media_files")
+}
+
+model PageVersion {
+  id            Int      @id @default(autoincrement())
+  versionNumber Int      @map("version_number")
+  title         String
+  content       String?
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  // 外键
+  pageId        Int      @map("page_id")
+  page          Page     @relation(fields: [pageId], references: [id], onDelete: Cascade)
+  authorId      Int      @map("author_id")
+  author        User     @relation(fields: [authorId], references: [id])
+
+  @@map("page_versions")
+}
+
+model Comment {
+  id        Int           @id @default(autoincrement())
+  content   String
+  status    CommentStatus @default(PENDING)
+  createdAt DateTime      @default(now()) @map("created_at")
+  updatedAt DateTime      @updatedAt @map("updated_at")
+
+  // 外键
+  pageId    Int           @map("page_id")
+  page      Page          @relation(fields: [pageId], references: [id], onDelete: Cascade)
+  authorId  Int           @map("author_id")
+  author    User          @relation(fields: [authorId], references: [id])
+
+  // 自关联 - 回复评论
+  parentId  Int?          @map("parent_id")
+  parent    Comment?      @relation("CommentReplies", fields: [parentId], references: [id])
+  replies   Comment[]     @relation("CommentReplies")
+
+  @@map("comments")
+}
+
+model Setting {
+  key         String   @id
+  value       String?
+  type        String   @default("string")
+  description String?
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@map("settings")
+}
+
+// 枚举类型
+enum Role {
+  ADMIN
+  EDITOR
+  AUTHOR
+  SUBSCRIBER
+}
+
+enum PageStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+  SCHEDULED
+}
+
+enum CommentStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  SPAM
+}
