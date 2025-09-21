@@ -19,6 +19,7 @@ import MediaLibraryPage from './pages/admin/MediaLibraryPage';
 import SettingsPage from './pages/admin/SettingsPage';
 import HomePage from './pages/public/HomePage';
 import NotFoundPage from './pages/NotFoundPage';
+import TestPageBuilder from './pages/TestPageBuilder';
 
 import './App.css';
 
@@ -62,6 +63,9 @@ const App: React.FC = () => {
             <Route path="media" element={<MediaLibraryPage />} />
             <Route path="settings" element={<SettingsPage />} />
           </Route>
+
+          {/* 测试页面 */}
+          <Route path="/test/page-builder" element={<TestPageBuilder />} />
 
           {/* 404 页面 */}
           <Route path="*" element={<NotFoundPage />} />

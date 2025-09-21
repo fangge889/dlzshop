@@ -1,15 +1,5 @@
 import React from 'react';
-import { Card, Typography, Row, Col, Tooltip } from 'antd';
-import { 
-  FontSizeOutlined, 
-  PictureOutlined, 
-  ButtonOutlined,
-  ContainerOutlined,
-  MinusOutlined,
-  TableOutlined,
-  FormOutlined,
-  CarouselOutlined
-} from '@ant-design/icons';
+import { Card, Typography, Tooltip } from 'antd';
 import { useDraggable } from '@dnd-kit/core';
 import { ComponentLibraryItem } from './types';
 import { usePageBuilder } from './DragContext';

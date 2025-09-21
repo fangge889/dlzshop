@@ -4,6 +4,7 @@ import { PageBuilderProvider } from './DragContext';
 import { ComponentLibrary } from './ComponentLibrary';
 import { Canvas } from './Canvas';
 import { PropertyPanel } from './PropertyPanel';
+import { PageBuilderToolbar } from './PageBuilderToolbar';
 import { ComponentConfig } from './types';
 
 const { Sider, Content } = Layout;
@@ -22,6 +23,11 @@ export const PageBuilder: React.FC<PageBuilderProps> = ({
   return (
     <PageBuilderProvider initialComponents={initialComponents}>
       <Layout style={{ height: '100vh', overflow: 'hidden' }}>
+        {/* 顶部工具栏 */}
+        <PageBuilderToolbar 
+          onSave={onSave}
+          onPreview={onPreview}
+        />
         {/* 左侧组件库 */}
         <Sider
           width={280}

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Card, Empty, Button, Space, Typography } from 'antd';
-import { PlusOutlined, EyeOutlined, MobileOutlined, TabletOutlined, DesktopOutlined } from '@ant-design/icons';
+import { EyeOutlined, MobileOutlined, TabletOutlined, DesktopOutlined } from '@ant-design/icons';
 import { DndContext, DragEndEvent, DragOverEvent, DragStartEvent } from '@dnd-kit/core';
 import { DropZone } from './DropZone';
 import { DragLayer } from './DragLayer';
@@ -17,7 +17,6 @@ export const Canvas: React.FC<CanvasProps> = ({ style = {} }) => {
   const { 
     state, 
     addComponent, 
-    moveComponent, 
     setDraggedComponent,
     setPreviewMode,
     setDeviceMode
@@ -43,7 +42,7 @@ export const Canvas: React.FC<CanvasProps> = ({ style = {} }) => {
   };
 
   // 拖拽悬停
-  const handleDragOver = (event: DragOverEvent) => {
+  const handleDragOver = (_event: DragOverEvent) => {
     // 可以在这里处理拖拽悬停逻辑
   };
 
@@ -65,6 +64,8 @@ export const Canvas: React.FC<CanvasProps> = ({ style = {} }) => {
         id: `${dragData.component.type}-${Date.now()}`,
         type: dragData.component.type,
         name: dragData.component.name,
+        icon: dragData.component.icon,
+        category: dragData.component.category,
         props: { ...dragData.component.props },
         children: []
       };

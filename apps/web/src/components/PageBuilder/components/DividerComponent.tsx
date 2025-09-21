@@ -5,12 +5,11 @@ import { ComponentProps } from '../types';
 interface DividerComponentProps extends ComponentProps {
   props: {
     type?: 'horizontal' | 'vertical';
-    orientation?: 'left' | 'right' | 'center';
-    orientationMargin?: string | number;
     dashed?: boolean;
     plain?: boolean;
+    orientation?: 'left' | 'right' | 'center';
+    orientationMargin?: string | number;
     style?: React.CSSProperties;
-    children?: string;
   };
 }
 
@@ -24,26 +23,26 @@ export const DividerComponent: React.FC<DividerComponentProps> = ({
 }) => {
   const {
     type = 'horizontal',
-    orientation = 'center',
-    orientationMargin,
     dashed = false,
     plain = false,
-    style = {},
-    children
+    orientation = 'center',
+    orientationMargin,
+    style = {}
   } = componentProps;
 
   return (
-    <div onClick={onSelect}>
+    <div onClick={onSelect} style={{ position: 'relative' }}>
       <Divider
         type={type}
-        orientation={orientation}
-        orientationMargin={orientationMargin}
         dashed={dashed}
         plain={plain}
-        style={style}
-      >
-        {children}
-      </Divider>
+        orientation={orientation}
+        orientationMargin={orientationMargin}
+        style={{
+          margin: '16px 0',
+          ...style
+        }}
+      />
     </div>
   );
 };

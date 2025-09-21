@@ -1,7 +1,7 @@
 import React from 'react';
 import { useDroppable } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
-import { Card, Empty, Typography } from 'antd';
+import { Typography } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { ComponentConfig } from './types';
 import { DraggableComponent } from './DraggableComponent';

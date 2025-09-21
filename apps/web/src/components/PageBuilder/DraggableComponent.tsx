@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import { useDraggable, useDroppable } from '@dnd-kit/core';
 import { CSS } from '@dnd-kit/utilities';
-import { Card, Button, Space, Tooltip } from 'antd';
+import { Button, Space, Tooltip } from 'antd';
 import { 
   DragOutlined, 
   EditOutlined, 
