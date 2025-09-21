@@ -172,7 +172,7 @@ export const DropZone: React.FC<DropZoneProps> = ({
         </SortableContext>
       )}
 
-      <style jsx>{`
+      <style>{`
         .drop-zone {
           transition: all 0.2s ease;
         }

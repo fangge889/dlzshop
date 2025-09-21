@@ -14,6 +14,7 @@ import RegisterPage from './pages/auth/RegisterPage';
 import DashboardPage from './pages/admin/DashboardPage';
 import PagesListPage from './pages/admin/PagesListPage';
 import PageEditorPage from './pages/admin/PageEditorPage';
+import PageBuilderPage from './pages/admin/PageBuilderPage';
 import MediaLibraryPage from './pages/admin/MediaLibraryPage';
 import SettingsPage from './pages/admin/SettingsPage';
 import HomePage from './pages/public/HomePage';
@@ -56,6 +57,8 @@ const App: React.FC = () => {
             <Route path="pages" element={<PagesListPage />} />
             <Route path="pages/new" element={<PageEditorPage />} />
             <Route path="pages/:id/edit" element={<PageEditorPage />} />
+            <Route path="pages/builder" element={<PageBuilderPage />} />
+            <Route path="pages/:id/builder" element={<PageBuilderPage />} />
             <Route path="media" element={<MediaLibraryPage />} />
             <Route path="settings" element={<SettingsPage />} />
           </Route>

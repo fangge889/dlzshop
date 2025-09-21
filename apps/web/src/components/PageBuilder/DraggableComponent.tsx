@@ -234,7 +234,7 @@ export const DraggableComponent: React.FC<DraggableComponentProps> = ({
         )}
       </div>
 
-      <style jsx>{`
+      <style>{`
         .draggable-component {
           transition: all 0.2s ease;
         }

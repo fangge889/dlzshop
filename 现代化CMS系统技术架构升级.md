@@ -26,13 +26,13 @@
     "component": "antd"
   },
   "Backend": "Node.js + Express.js + Prisma + SQLite + Socket.io",
-  "Frontend": "React + TypeScript + Ant Design + Redux Toolkit",
+  "Frontend": "React + TypeScript + Ant Design + Redux Toolkit + @dnd-kit",
   "Tools": "Multer + Sharp + Vite + Prisma"
 }
 
 ## Design
 
-现代化企业级设计，采用Ant Design设计语言，蓝色主色调配合中性灰，左侧导航+主内容区布局，支持富文本编辑、实时预览、拖拽构建等功能的专业CMS界面
+现代化企业级设计，采用Ant Design设计语言，蓝色主色调配合中性灰，左侧导航+主内容区布局，支持富文本编辑、实时预览、拖拽构建等功能的专业CMS界面。页面构建器采用三栏布局：左侧组件库、中间画布区、右侧属性面板，支持响应式预览和图层管理
 
 ## Plan
 
@@ -54,7 +54,7 @@ Note:
 
 [X] 开发富文本编辑器和Markdown编辑器功能模块
 
-[/] 构建可视化页面构建器，实现拖拽组件系统
+[X] 构建可视化页面构建器，实现拖拽组件系统
 
 [ ] 实现内容管理工作流，包括草稿、审核、发布功能
 

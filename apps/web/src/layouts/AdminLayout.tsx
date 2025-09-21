@@ -19,6 +19,7 @@ import {
   SettingOutlined,
   UserOutlined,
   LogoutOutlined,
+  BuildOutlined,
 } from '@ant-design/icons';
 
 import { useAppSelector, useAppDispatch } from '@/hooks/redux';
@@ -49,6 +50,11 @@ export const AdminLayout: React.FC = () => {
       key: '/admin/pages',
       icon: <FileTextOutlined />,
       label: '页面管理',
+    },
+    {
+      key: '/admin/pages/builder',
+      icon: <BuildOutlined />,
+      label: '页面构建器',
     },
     {
       key: '/admin/media',

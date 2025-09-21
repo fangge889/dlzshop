@@ -39,9 +39,12 @@ export interface ComponentProps {
   props: Record<string, any>;
   children?: ComponentConfig[];
   isSelected?: boolean;
-  onSelect?: (id: string) => void;
-  onUpdate?: (id: string, props: Record<string, any>) => void;
-  onDelete?: (id: string) => void;
+  previewMode?: boolean;
+  onSelect?: () => void;
+  onUpdate?: (props: Record<string, any>) => void;
+  onDelete?: () => void;
+  parentId?: string;
+  index?: number;
 }
 
 export interface ComponentLibraryItem {
