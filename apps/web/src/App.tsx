@@ -27,6 +27,11 @@ import { StepByStepTest } from './pages/StepByStepTest';
 import { TestLogin } from './pages/TestLogin';
 import { PublishedPages } from './pages/public/PublishedPages';
 import { PageDetail } from './pages/public/PageDetail';
+import { ProductList } from './pages/admin/ProductList';
+import { ProductNew } from './pages/admin/ProductNew';
+import { ProductEdit } from './pages/admin/ProductEdit';
+import { ProductDetail } from './pages/admin/ProductDetail';
+import CategoryList from './pages/admin/CategoryList';
 
 import './App.css';
 
@@ -71,6 +76,11 @@ const App: React.FC = () => {
             <Route path="pages/:id/edit" element={<PageEditorPage />} />
             <Route path="pages/builder" element={<PageBuilderPage />} />
             <Route path="pages/:id/builder" element={<PageBuilderPage />} />
+            <Route path="products" element={<ProductList />} />
+            <Route path="products/new" element={<ProductNew />} />
+            <Route path="products/:id" element={<ProductDetail />} />
+            <Route path="products/:id/edit" element={<ProductEdit />} />
+            <Route path="categories" element={<CategoryList />} />
             <Route path="media" element={<MediaLibraryPage />} />
             <Route path="settings" element={<SettingsPage />} />
           </Route>

@@ -2,11 +2,6 @@ import { Request, Response, NextFunction } from 'express';
 import { Prisma } from '@prisma/client';
 import { logger } from '../utils/logger';
 
-export interface AppError extends Error {
-  statusCode?: number;
-  isOperational?: boolean;
-}
-
 // 创建应用错误
 export class AppError extends Error {
   statusCode: number;

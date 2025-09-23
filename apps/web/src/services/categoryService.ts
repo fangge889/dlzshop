@@ -1,6 +1,6 @@
 import { Category, ApiResponse } from '../types/product';
 
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001/api';
+const API_BASE_URL = (window as any).env?.REACT_APP_API_URL || 'http://localhost:3001/api';
 
 class CategoryService {
   private async request<T>(
