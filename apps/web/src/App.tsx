@@ -27,6 +27,8 @@ import { StepByStepTest } from './pages/StepByStepTest';
 import { TestLogin } from './pages/TestLogin';
 import { PublishedPages } from './pages/public/PublishedPages';
 import { PageDetail } from './pages/public/PageDetail';
+import { ProductListPage } from './pages/public/ProductListPage';
+import { ProductDetailPage } from './pages/public/ProductDetailPage';
 import { ProductList } from './pages/admin/ProductList';
 import { ProductNew } from './pages/admin/ProductNew';
 import { ProductEdit } from './pages/admin/ProductEdit';
@@ -55,6 +57,10 @@ const App: React.FC = () => {
           {/* 已发布内容页面 */}
           <Route path="/published" element={<PublishedPages />} />
           <Route path="/page/:slug" element={<PageDetail />} />
+          
+          {/* 前端商品页面 */}
+          <Route path="/products" element={<ProductListPage />} />
+          <Route path="/products/:id" element={<ProductDetailPage />} />
 
           {/* 认证路由 */}
           <Route path="/auth/login" element={
