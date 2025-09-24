@@ -33,7 +33,7 @@ import { ProductList } from './pages/admin/ProductList';
 import { ProductNew } from './pages/admin/ProductNew';
 import { ProductEdit } from './pages/admin/ProductEdit';
 import { ProductDetail } from './pages/admin/ProductDetail';
-import CategoryList from './pages/admin/CategoryList';
+import { CategoryManagement } from './pages/admin/CategoryManagement';
 
 import './App.css';
 
@@ -86,7 +86,7 @@ const App: React.FC = () => {
             <Route path="products/new" element={<ProductNew />} />
             <Route path="products/:id" element={<ProductDetail />} />
             <Route path="products/:id/edit" element={<ProductEdit />} />
-            <Route path="categories" element={<CategoryList />} />
+            <Route path="categories" element={<CategoryManagement />} />
             <Route path="media" element={<MediaLibraryPage />} />
             <Route path="settings" element={<SettingsPage />} />
           </Route>
